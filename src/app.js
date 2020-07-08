@@ -8,13 +8,17 @@ const logger = require('koa-logger')
 
 const index = require('./routes/index')
 const users = require('./routes/users')
-
+const errorViewRouter = require('./routes/view/error')
+const {isProd} = require('./utils/env')
 // error handler
-onerror(app)
+const onerrorConf = {}
+if (isProd)
+  onerrorConf.redirect = '/error'
+onerror(app, onerrorConf)
 
 // middlewares
 app.use(bodyparser({
-  enableTypes:['json', 'form', 'text']
+  enableTypes: ['json', 'form', 'text']
 }))
 app.use(json())
 app.use(logger())
@@ -35,6 +39,7 @@ app.use(async (ctx, next) => {
 // routes
 app.use(index.routes(), index.allowedMethods())
 app.use(users.routes(), users.allowedMethods())
+app.use(errorViewRouter.routes(), errorViewRouter.allowedMethods())
 
 // error-handling
 app.on('error', (err, ctx) => {
