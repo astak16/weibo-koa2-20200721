@@ -16,4 +16,11 @@ router.get('/json', async (ctx, next) => {
   }
 })
 
+router.get('/profile/:username',async (ctx,next)=>{
+  const {username} = ctx.params
+  ctx.body = {
+
+  }
+})
+
 module.exports = router
