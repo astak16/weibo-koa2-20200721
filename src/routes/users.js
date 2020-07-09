@@ -1,13 +1,8 @@
 const router = require('koa-router')()
-
+const jwt = require('jsonwebtoken')
+const util = require('util')
+const verigy = util.promisify(jwt.verify)
 router.prefix('/users')
 
-router.get('/', function (ctx, next) {
-  ctx.body = 'this is a users response!'
-})
-
-router.get('/bar', function (ctx, next) {
-  ctx.body = 'this is a users/bar response'
-})
 
 module.exports = router

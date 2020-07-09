@@ -10,12 +10,19 @@ const index = require('./routes/index')
 const users = require('./routes/users')
 const errorViewRouter = require('./routes/view/error')
 const {isProd} = require('./utils/env')
+const {jwtKoa} = require('koa-jwt')
+const {SECRET} = require('./conf/constants')
 // error handler
 const onerrorConf = {}
 if (isProd)
   onerrorConf.redirect = '/error'
 onerror(app, onerrorConf)
 
+app.use(jwtKoa({
+  secret: SECRET
+}).unless({
+  path: [/^\/users\/login/] // 自定义哪些目录忽略 jwt 验证
+}))
 // middlewares
 app.use(bodyparser({
   enableTypes: ['json', 'form', 'text']
