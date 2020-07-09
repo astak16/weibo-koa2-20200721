@@ -11,16 +11,20 @@ router.get('/string', async (ctx, next) => {
 })
 
 router.get('/json', async (ctx, next) => {
+  const session = ctx.session
+  if (session.view == null) {
+    session.viewNum = 0
+  }
+  session.viewNum++
   ctx.body = {
-    title: 'koa2 json'
+    title: 'koa2 json',
+    viewNum: session.viewNum
   }
 })
 
-router.get('/profile/:username',async (ctx,next)=>{
+router.get('/profile/:username', async (ctx, next) => {
   const {username} = ctx.params
-  ctx.body = {
-
-  }
+  ctx.body = {}
 })
 
 module.exports = router

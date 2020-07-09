@@ -5,24 +5,28 @@ const json = require('koa-json')
 const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
+const session = require('koa-generic-session')
+const redisStore = require('koa-redis')
 
 const index = require('./routes/index')
 const users = require('./routes/users')
 const errorViewRouter = require('./routes/view/error')
 const {isProd} = require('./utils/env')
-const {jwtKoa} = require('koa-jwt')
-const {SECRET} = require('./conf/constants')
+// const {jwtKoa} = require('koa-jwt')
+// const {SECRET} = require('./conf/constants')
+const {REDIS_CONF} = require('./conf/db')
+
 // error handler
 const onerrorConf = {}
 if (isProd)
   onerrorConf.redirect = '/error'
 onerror(app, onerrorConf)
 
-app.use(jwtKoa({
-  secret: SECRET
-}).unless({
-  path: [/^\/users\/login/] // 自定义哪些目录忽略 jwt 验证
-}))
+// app.use(jwtKoa({
+//   secret: SECRET
+// }).unless({
+//   path: [/^\/users\/login/] // 自定义哪些目录忽略 jwt 验证
+// }))
 // middlewares
 app.use(bodyparser({
   enableTypes: ['json', 'form', 'text']
@@ -33,6 +37,23 @@ app.use(require('koa-static')(__dirname + '/public'))
 
 app.use(views(__dirname + '/views', {
   extension: 'ejs'
+}))
+
+
+// session 配置
+app.keys = ['UIsdf_7878#$']
+app.use(session({
+  key: 'weibo.sid', // cookie name 默认 'koa.sid'
+  prefix: 'weibo:sess:', // redis key 前缀，默认是 'koa:sess:'
+  cookie: {
+    path: '/',
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000   // ms
+  },
+  // ttl:24 * 60 * 60 * 1000   // ms, 不写，默认和 maxAge 一样
+  store: redisStore({
+    all: `${REDIS_CONF.host}:${REDIS_CONF.port}`
+  })
 }))
 
 // logger
