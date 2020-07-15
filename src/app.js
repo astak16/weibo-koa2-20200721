@@ -9,6 +9,8 @@ const session = require('koa-generic-session')
 const redisStore = require('koa-redis')
 
 const index = require('./routes/index')
+const userViewRouter = require('./routes/view/user')
+const userApiRouter = require('./routes/api/user')
 const users = require('./routes/users')
 const errorViewRouter = require('./routes/view/error')
 const {isProd} = require('./utils/env')
@@ -66,6 +68,8 @@ app.use(async (ctx, next) => {
 
 // routes
 app.use(index.routes(), index.allowedMethods())
+app.use(userViewRouter.routes(), userViewRouter.allowedMethods())
+app.use(userApiRouter.routes(), userApiRouter.allowedMethods())
 app.use(users.routes(), users.allowedMethods())
 app.use(errorViewRouter.routes(), errorViewRouter.allowedMethods())
 
