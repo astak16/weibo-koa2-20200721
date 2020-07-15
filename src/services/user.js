@@ -24,6 +24,24 @@ const getUserInfo = async (userName, password) => {
   return formatRes
 }
 
+/**
+ *
+ * @param {string} userName
+ * @param {string} password
+ * @param {number} gender
+ * @param {string} nickName
+ */
+const createUser = async ({userName, password, gender = 3, nickName}) => {
+  const result = await User.create({
+    userName,
+    password,
+    gender,
+    nickName: nickName ? nickName : userName
+  })
+  return result.dataValues
+}
+
 module.exports = {
-  getUserInfo
+  getUserInfo,
+  createUser
 }
