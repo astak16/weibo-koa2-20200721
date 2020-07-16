@@ -22,5 +22,6 @@ const loginRedirect = async (ctx, next) => {
 }
 
 module.exports = {
-  loginCheck
+  loginCheck,
+  loginRedirect
 }
