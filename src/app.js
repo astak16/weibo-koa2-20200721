@@ -1,4 +1,5 @@
 const Koa = require('koa')
+const path = require('path')
 const app = new Koa()
 const views = require('koa-views')
 const json = require('koa-json')
@@ -13,6 +14,7 @@ const index = require('./routes/index')
 const userViewRouter = require('./routes/view/user')
 const userApiRouter = require('./routes/api/user')
 const users = require('./routes/users')
+const utilsApiRouter = require('./routes/api/util')
 const errorViewRouter = require('./routes/view/error')
 const {isProd} = require('./utils/env')
 // const {jwtKoa} = require('koa-jwt')
@@ -37,6 +39,7 @@ app.use(bodyparser({
 app.use(json())
 app.use(logger())
 app.use(require('koa-static')(__dirname + '/public'))
+app.use(require('koa-static')(path.join(__dirname, '..', '/uploadFiles')))
 
 app.use(views(__dirname + '/views', {
   extension: 'ejs'
@@ -72,6 +75,7 @@ app.use(index.routes(), index.allowedMethods())
 app.use(userViewRouter.routes(), userViewRouter.allowedMethods())
 app.use(userApiRouter.routes(), userApiRouter.allowedMethods())
 app.use(users.routes(), users.allowedMethods())
+app.use(utilsApiRouter.routes(), utilsApiRouter.allowedMethods)
 app.use(errorViewRouter.routes(), errorViewRouter.allowedMethods())
 
 // error-handling
