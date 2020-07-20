@@ -60,7 +60,7 @@ const updateUser = async ({newPassword, newNickName, newPicture, newCity}, {user
     updateData.nickName = newNickName
   if (newPicture)
     updateData.picture = newPicture
-  if (newPassword)
+  if (newCity)
     updateData.city = newCity
   const whereData = {
     userName

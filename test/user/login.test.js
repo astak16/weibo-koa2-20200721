@@ -72,16 +72,16 @@ test('修改密码，应该成功', async () => {
   expect(res.body.errno).toBe(0)
 })
 
-test('退出登录应该成功', async () => {
+test('删除用户，应该成功', async () => {
   const res = await server
-    .post('/api/user/logout')
+    .post('/api/user/delete')
     .set('cookie', COOKIE)
   expect(res.body.errno).toBe(0)
 })
 
-test('删除用户，应该成功', async () => {
+test('退出登录应该成功', async () => {
   const res = await server
-    .post('/api/user/delete')
+    .post('/api/user/logout')
     .set('cookie', COOKIE)
   expect(res.body.errno).toBe(0)
 })

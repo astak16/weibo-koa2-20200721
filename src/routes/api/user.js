@@ -52,7 +52,7 @@ router.patch('/changePassword', loginCheck, genValidator(userValidator), async (
   ctx.body = await changePassword(userName, password, newPassword)
 })
 
-router.patch('logout',loginCheck,async (ctx,next)=>{
+router.post('/logout',loginCheck,async (ctx,next)=>{
   ctx.body = await logout(ctx)
 })
 

@@ -82,7 +82,7 @@ const changeInfo = async (ctx, {nickName, city, picture}) => {
     userName
   })
   if (result) {
-    Object.assign(ctx.session.userInfo, {userName, password, city})
+    Object.assign(ctx.session.userInfo, {nickName, picture, city})
     return new SuccessModel()
   }
   return new ErrorModel(changeInfoFailInfo)
