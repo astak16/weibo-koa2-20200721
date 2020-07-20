@@ -15,7 +15,6 @@ let COOKIE = ''
 test('注册一个用户，应该成功', async () => {
   const res = await server.post('/api/user/register')
     .send(testUser)
-  console.log(res.body.errno)
   expect(res.body.errno).toBe(0)
 })
 

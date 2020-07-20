@@ -10,10 +10,10 @@ const session = require('koa-generic-session')
 const redisStore = require('koa-redis')
 const {SESSION_SECRET_KEY} = require('./conf/secretKeys')
 
-const index = require('./routes/index')
+const blogViewRouter = require('./routes/view/blog')
+const blogHomeApiRouter = require('./routes/api/blog-home')
 const userViewRouter = require('./routes/view/user')
 const userApiRouter = require('./routes/api/user')
-const users = require('./routes/users')
 const utilsApiRouter = require('./routes/api/util')
 const errorViewRouter = require('./routes/view/error')
 const {isProd} = require('./utils/env')
@@ -27,12 +27,7 @@ if (isProd)
   onerrorConf.redirect = '/error'
 onerror(app, onerrorConf)
 
-// app.use(jwtKoa({
-//   secret: SECRET
-// }).unless({
-//   path: [/^\/users\/login/] // 自定义哪些目录忽略 jwt 验证
-// }))
-// middlewares
+
 app.use(bodyparser({
   enableTypes: ['json', 'form', 'text']
 }))
@@ -71,10 +66,10 @@ app.use(async (ctx, next) => {
 })
 
 // routes
-app.use(index.routes(), index.allowedMethods())
+app.use(blogViewRouter.routes(), userApiRouter.allowedMethods())
+app.use(blogHomeApiRouter.routes(), blogHomeApiRouter.allowedMethods())
 app.use(userViewRouter.routes(), userViewRouter.allowedMethods())
 app.use(userApiRouter.routes(), userApiRouter.allowedMethods())
-app.use(users.routes(), users.allowedMethods())
 app.use(utilsApiRouter.routes(), utilsApiRouter.allowedMethods)
 app.use(errorViewRouter.routes(), errorViewRouter.allowedMethods())
 
