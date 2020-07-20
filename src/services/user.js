@@ -52,8 +52,31 @@ const deleteUser = async (userName) => {
   return result > 0
 }
 
+const updateUser = async ({newPassword, newNickName, newPicture, newCity}, {userName, password}) => {
+  const updateData = {}
+  if (newPassword)
+    updateData.password = newPassword
+  if (newNickName)
+    updateData.nickName = newNickName
+  if (newPicture)
+    updateData.picture = newPicture
+  if (newPassword)
+    updateData.city = newCity
+  const whereData = {
+    userName
+  }
+  if (password) {
+    whereData.password = password
+  }
+  const result = await User.update(updateData, {
+    where: whereData
+  })
+  return result[0] > 0
+}
+
 module.exports = {
   getUserInfo,
   createUser,
-  deleteUser
+  deleteUser,
+  updateUser
 }

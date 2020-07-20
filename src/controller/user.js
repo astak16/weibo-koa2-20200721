@@ -1,8 +1,13 @@
-const {getUserInfo, createUser} = require('../services/user')
+const {getUserInfo, createUser, deleteUser, updateUser} = require('../services/user')
 const {SuccessModel, ErrorModel} = require('../model/ResModel')
-const {registerUserNameNotExistInfo, registerFailInfo, loginFailInfo, deleteUserFailInfo} = require('../model/ErrorInfo')
+const {
+  registerUserNameNotExistInfo,
+  registerFailInfo,
+  loginFailInfo,
+  deleteUserFailInfo,
+  changeInfoFailInfo
+} = require('../model/ErrorInfo')
 const {doCrypto} = require('../utils/cryp')
-const {deleteUser} = require('../services/user')
 
 /**
  *
@@ -62,10 +67,30 @@ const deleteCurrentUser = async (userName) => {
   return new ErrorModel(deleteUserFailInfo)
 }
 
+const changeInfo = async (ctx, {nickName, city, picture}) => {
+  const {userName} = ctx.session.userInfo
+  if (!nickName) {
+    nickName = userName
+  }
+
+  const result = await updateUser({
+    newPicture: picture,
+    newCity: city,
+    newNickName: nickName
+  }, {
+    userName
+  })
+  if (result) {
+    Object.assign(ctx.session.userInfo, {userName, password, city})
+    return new SuccessModel()
+  }
+  return new ErrorModel(changeInfoFailInfo)
+}
 
 module.exports = {
   isExist,
   register,
   login,
-  deleteCurrentUser
+  deleteCurrentUser,
+  changeInfo
 }
