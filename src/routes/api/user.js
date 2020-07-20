@@ -4,7 +4,9 @@ const {
   register,
   login,
   deleteCurrentUser,
-  changeInfo
+  changeInfo,
+  changePassword,
+  logout
 } = require('../../controller/user')
 const {userValidator} = require('../../validator/user')
 const {genValidator} = require('../../middlewares/validator')
@@ -40,8 +42,18 @@ router.post('/delete', loginCheck, async (ctx, next) => {
 })
 
 router.patch('/changeInfo', loginCheck, genValidator(userValidator), async (ctx, next) => {
-  const {nickName, city, picture} = ctx.session.body
+  const {nickName, city, picture} = ctx.request.body
   ctx.body = await changeInfo(ctx, {nickName, city, picture})
+})
+
+router.patch('/changePassword', loginCheck, genValidator(userValidator), async (ctx, next) => {
+  const {password, newPassword} = ctx.request.body
+  const {userName} = ctx.session.userInfo
+  ctx.body = await changePassword(userName, password, newPassword)
+})
+
+router.patch('logout',loginCheck,async (ctx,next)=>{
+  ctx.body = await logout(ctx)
 })
 
 module.exports = router
