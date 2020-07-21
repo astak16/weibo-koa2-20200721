@@ -1,6 +1,6 @@
 const server = require('../server')
-
 const {COOKIE} = require('../testUserInfo')
+
 let BLOG_ID
 test('创建一条微博，应该成功', async () => {
   const content = '单元测试自动测试的微博_' + Date.now()
